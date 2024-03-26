@@ -1,0 +1,19 @@
+LocalDiscoPub License
+Public Domain Notice for MedCPT Utilization
+This software, LocalDiscoPub, incorporates the MedCPT model developed by the National Center for Biotechnology Information (NCBI), which is a "United States Government Work" under the terms of the United States Copyright Act. As such, it was written as part of the author's official duties as a United States Government employee and thus cannot be copyrighted. This component is freely available to the public for use without any restriction.
+
+The National Library of Medicine (NLM) and the U.S. Government have not placed any restriction on its use or reproduction. Although all reasonable efforts have been taken to ensure the accuracy and reliability of the MedCPT model and data, the NLM and the U.S. Government do not and cannot warrant the performance or results that may be obtained by using this software or data. The NLM and the U.S. Government disclaim all warranties, express or implied, including warranties of performance, merchantability, or fitness for any particular purpose.
+
+Please cite the following in any work or product based on this material:
+Qiao Jin, Won Kim, Qingyu Chen, Donald C Comeau, Lana Yeganova, John Wilbur, Zhiyong Lu. MedCPT: Contrastive Pre-trained Transformers with Large-scale PubMed Search Logs for Zero-shot Biomedical Information Retrieval.
+
+License for LocalDiscoPub Contributions
+The software components and contributions developed for LocalDiscoPub are licensed under the MIT License. This excludes the MedCPT model and related data, which are covered under the Public Domain Notice as specified above.
+
+MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+

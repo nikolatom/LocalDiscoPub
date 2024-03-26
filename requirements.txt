@@ -1,0 +1,7 @@
+streamlit
+faiss-cpu
+torch
+numpy
+pandas
+transformers
+watchdog
