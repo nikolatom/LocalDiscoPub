@@ -1,4 +1,4 @@
-# LocalDiscoPub - DISCOver PUBmed LOCALly README
+# LocalDiscoPub - DISCOver PUBmed LOCALly
 
 Welcome to LocalDiscoPub, a powerful tool designed to revolutionize the way researchers and professionals conduct semantic searches through the PubMed database, right from the comfort of their local machines. Leveraging cutting-edge AI, LocalDiscoPub facilitates deep, insightful searches across PubMed's vast repository of medical literature, offering unparalleled access to abstracts, full texts, and other critical knowledge bases.
 
