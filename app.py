@@ -6,6 +6,7 @@ import pandas as pd
 from transformers import AutoTokenizer, AutoModel
 import faiss
 import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 from heapq import nlargest
 import tempfile
 
@@ -19,32 +20,6 @@ def load_embeddings_and_pmids(embeds_file, pmids_file):
         pmids = json.load(f)
     return embeds, pmids
 
-def load_abstracts_for_pmids(pmids_list, chunks_dir):
-    abstracts = {}
-    for file in os.listdir(chunks_dir):
-        if file.startswith("pubmed_chunk") and file.endswith(".json"):
-            try:
-                with open(os.path.join(chunks_dir, file), 'r') as f:
-                    data = json.load(f)
-                    for pmid in pmids_list:
-                        pmid_str = str(pmid)
-                        if pmid_str in data:
-                            abstracts[pmid_str] = data[pmid_str].get('a', 'No abstract available')
-            except json.JSONDecodeError as e:
-                st.error(f"Problem with decoding JSON file {file}: {e}. Some abstracts/papers from this file might not be shown and need to be found manually based on PMID.")
-                continue
-            except Exception as e:
-                st.error(f"An unexpected error occurred while processing file {file}: {e}")
-                continue
-    return abstracts
-
-def load_embeddings_and_pmids(embeds_file, pmids_file):
-    print(f"Loading embeddings from {embeds_file} and PMIDs from {pmids_file}")
-    embeds = np.load(embeds_file)
-    with open(pmids_file, 'r') as f:
-        pmids = json.load(f)
-    print(f"Loaded {len(embeds)} embeddings and {len(pmids)} PMIDs")
-    return embeds, pmids
 
 def load_abstracts_for_pmids(pmids_list, chunks_dir):
     print(f"Loading abstracts for PMIDs: {pmids_list} from {chunks_dir}")
@@ -101,11 +76,10 @@ def search_pubmed(query, chunks_dir):
         progress_bar.progress(i / total_chunks)
 
     print(f"Found {len(results)} results")
-    top_results = nlargest(10, results, key=lambda x: x[0])
+    top_results = nlargest(50, results, key=lambda x: x[0])
     top_pmids = [str(pmid) for _, pmid in top_results]
     
     print(f"Top PMIDs: {top_pmids}")
-    # Proceed with loading abstracts and other steps...
 
     
     # Prepare for loading abstracts
@@ -114,9 +88,11 @@ def search_pubmed(query, chunks_dir):
     
     abstracts = {}
     total_pmids = len(top_pmids)
-    for i, pmid in enumerate(top_pmids, start=1):
-        abstracts.update(load_abstracts_for_pmids([pmid], chunks_dir))
-        progress_bar.progress(i / total_pmids)
+
+    # THIS WAS DEACTIVATED IN ORDER TO MAKE THE SEARCH FAST
+    # for i, pmid in enumerate(top_pmids, start=1):
+    #     abstracts.update(load_abstracts_for_pmids([pmid], chunks_dir))
+    #     progress_bar.progress(i / total_pmids)
     
     status_text.text('Search completed.')
     
@@ -129,6 +105,12 @@ def generate_results_file(results, abstracts):
             score, pmid = result
             tmpfile.write(f"PMID: {pmid}; Score: {score:.2f}\n")
             tmpfile.write(f"Abstract: {abstracts.get(str(pmid), 'No abstract available')}\n\n")
+        return tmpfile.name
+        
+def generate_pmids_file(results):
+    with tempfile.NamedTemporaryFile(delete=False, mode="w", suffix=".txt") as tmpfile:
+        for _, pmid in results:
+            tmpfile.write(f"{pmid}\n")
         return tmpfile.name
 
 # Streamlit UI setup
@@ -193,11 +175,21 @@ if st.button('Search'):
         # Optionally, allow users to download the results
         if top_results:
             results_file_path = generate_results_file(top_results, abstracts)
+            pmids_file_path = generate_pmids_file(top_results)  # Generate PMIDs file
+
             with open(results_file_path, "rb") as file:
                 st.download_button(
                     label="Download Search Results",
                     data=file,
                     file_name="PubMed_Search_Results.txt",
+                    mime="text/plain"
+                )
+
+            with open(pmids_file_path, "rb") as file:
+                st.download_button(
+                    label="Download PMIDs",
+                    data=file,
+                    file_name="PubMed_PMIDs.txt",
                     mime="text/plain"
                 )
 
