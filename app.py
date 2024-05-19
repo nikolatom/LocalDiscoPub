@@ -122,21 +122,21 @@ chunks_dir = st.text_input('Enter the path to the PubMed chunks directory:', 'pu
 
 # User input for query with an option to upload a file
 st.write("Enter your query:")
-user_query = st.text_input("Type your query here:", "")
+user_query = st.text_input("Type your query here:", "", help="Example: cholesterol regulation, lipidomics, breast cancer, ovarian cancer")
 query_file = st.file_uploader("Or upload a file with your query (TXT or CSV):", type=['txt', 'csv'])
 
 # New Feature: Gene list input and query generation
-st.write("Or enter a list of genes to generate a query:")
-genes = st.text_input("Enter a comma-separated list of genes:", "")  # Input field for genes
+st.write("Or enter a list of featuresto generate a query:")
+genes = st.text_input("Enter a comma-separated list of genes:", "", help="Example: NPC1,MZF1")  # Input field for genes
 
 # Option to upload a file containing the list of genes
-gene_file = st.file_uploader("Or upload a file with the list of genes (TXT or CSV):", type=['txt', 'csv'])
+gene_file = st.file_uploader("Or upload a file with the list of features(TXT or CSV):", type=['txt', 'csv'])
 
 # Checkbox for individual gene searches
-individual_gene_search = st.checkbox("Search for each gene individually")
+individual_gene_search = st.checkbox("Search for each gene individually (approx 1.5 min per 1 iteration - 1 feature )")
 
 # Parameter for number of top results
-top_n = st.number_input("Number of top results to retrieve", min_value=1, value=10)
+top_n = st.number_input("Number of publications (PMIDs) to retrieve", min_value=1, value=10)
 
 # Placeholders for status and progress should be initialized here to appear below the 'Search' button
 status_text = st.empty()
@@ -188,7 +188,7 @@ if st.button('Search'):
         pmids_files = []
         if individual_gene_search:
             for gene in gene_list:
-                gene_query = f"{user_query} AND {gene}"  # Combine user query with each gene
+                gene_query = f"{gene} AND {user_query}"  # Combine user query with each gene
                 st.text(f"Generated Query for {gene}: {gene_query}")  # Optionally display the generated query
                 results, gene_abstracts = search_pubmed(gene_query, chunks_dir)
                 top_results.extend(results)
@@ -211,7 +211,7 @@ if st.button('Search'):
             if genes:
                 gene_query = " AND ".join(gene_list)  # Constructs a query that searches for all of the genes
                 if user_query.strip():
-                    user_query = f"{user_query} AND {gene_query}"  # Combines the user query with the gene query
+                    user_query = f"{gene_query} AND {user_query}"  # Combines the user query with the gene query
                 else:
                     user_query = gene_query
             st.text(f"Generated Query: {user_query}")  # Optionally display the generated query
